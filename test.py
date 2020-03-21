@@ -1,39 +1,48 @@
-import os
-from excel import Excel
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'test.ui'
+#
+# Created by: PyQt5 UI code generator 5.13.2
+#
+# WARNING! All changes made in this file will be lost!
+
+import log_ui
+from PyQt5 import QtCore, QtGui, QtWidgets
+import sys
+
+class Ui_demo(object):
+    def setupUi(self, demo):
+        demo.setObjectName("demo")
+        demo.resize(400, 300)
+        self.form = demo
+        self.return_button = QtWidgets.QPushButton(demo)
+        self.return_button.setGeometry(QtCore.QRect(180, 150, 75, 23))
+        self.return_button.setObjectName("return_button")
+
+        self.retranslateUi(demo)
+        QtCore.QMetaObject.connectSlotsByName(demo)
+
+    def retranslateUi(self, demo):
+        _translate = QtCore.QCoreApplication.translate
+        demo.setWindowTitle(_translate("demo", "Dialog"))
+        self.return_button.setText(_translate("demo", "start"))
+        self.return_button.clicked.connect(self.goto_system)
+
+    def goto_system(self):
+        self.form.hide()
+        form1 = QtWidgets.QDialog()
+        ui = log_ui.Ui_log_form()
+        ui.setupUi(form1)
+        form1.show()
+        form1.exec_()
+        self.form.show()
 
 
 
-# 打开文件
-print('++++++++++++++++++++\n','debug','\n')
-file_path = os.getcwd()+'/data.xlsx'
-
-
-print("path:",file_path)
-excel = Excel(file_path)    #创建实例化
-print('all sheets')
-list = []
-list = excel.read_all_sheetnames(file_path)
-print('sheet names：',list[0])
-
-
-#sheet表名称
-sname = list[0]
-ord = excel.read_sheet_data(sname)
-print(ord)
-# 根据sheet索引或者名称获取sheet内容
-#sheet1 = workbook.sheet_by_index(0) # sheet索引从0开始
-# sheet1 = workbook.sheet_by_name('sheet2')
-# sheet1的名称，行数，列数
-# print(sheet1.name, sheet1.nrows, sheet1.ncols)
-# # 获取整行和整列的值（数组）
-# rows = sheet1.row_values(1) # 获取第三行内容
-# cols = sheet1.col_values(0) # 获取第1列内容
-# print(rows)
-# print(cols)
-# # 获取单元格内容
-# print(sheet1.cell(1, 0).value.encode('utf-8'))
-# print(sheet1.cell_value(1, 0).encode('utf-8'))
-# print(sheet1.row(1)[0].value.encode('utf-8'))
-# # 获取单元格内容的数据类型
-# print(sheet1.cell(1, 0).ctype)
-print('\n','end','\n++++++++++++++++++++')
+if __name__=="__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    widget = QtWidgets.QWidget()
+    ui = Ui_demo()  #实例化
+    ui.setupUi(widget)
+    widget.show()
+    sys.exit(app.exec_())

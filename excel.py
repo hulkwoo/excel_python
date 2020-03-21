@@ -23,16 +23,45 @@ class Excel(object):
         
                
         return list
+
 #TODO: 读取Excel内全部数据 参数sname是sheet页名字 
     def read_sheet_data(self, sname): 
         workbook = xlrd.open_workbook(self.path)
-        content = workbook.sheet_by_name(sname)
-        
-        ord_list=[]
-        for rownum in range(content.nrows):
-            ord_list.append(content.row_values(rownum))
+        content = workbook.sheet_by_name(sname)#通过对象名称查询
+        list = []
+        #print(content)
+        #获取总行数和列数
+
+        merage = content.merged_cells #获取所有合并单元格坐标
+        #格式的数据，(4, 5, 2, 4)的含义为：行从下标4开始，到下标5（不包含） 列从下标2开始，到下标4（不包含），为合并单元格，即C5 - 有勇有谋，单骑救主这个合并单元格
+        #print("merage:",merage)
+
+        rows = content.nrows
+        cols = content.ncols
+
+        #查找当前值是否有合并单元格
+        for row_index in range(content.nrows):
+            for col_index in range(content.ncols):
+                for (rlow, rhigh, clow, chigh) in merage:
+                    if (row_index >= rlow and row_index < rhigh):
+                        if (col_index >= clow and col_index < chigh):
+                            #print('该单元格[%d,%d]属于合并单元格，值为[%s]' % (row_index, col_index, cell_value))
+                            cell_value = content.cell_value(rlow, clow)
+                            list.append(cell_value)
+                        else:
+                            print("当前值不在合并单元格")
+                            cell_value = content.cell_value(row_index,col_index)
+                            list.append(cell_value)
+
+        print(list)
+
+        # ord_list = []
+        # for rownum in range(content.nrows):
+        #     ord_list.append(content.row_values(rownum))
+        #     print(ord_list)
+        #print(content)
         #返回的类型是一个list
-        return ord_list
+        return list
  
  
 #TODO:  写入单行Excel表
